@@ -7,31 +7,35 @@
 box.psa(continuous, treatment = NULL, strata = NULL, boxwex = 0.17, 
 offset = 0.17, col = c("yellow", "orange", "black", "red", "darkorange3"),
 xlab = "Stratum", legend.xy = NULL, 
-legend.labels = c("Control", "Treatment", "C/T Means Compared", 
-"KS p-values", "Strata-Treatment Size"), pts = TRUE, 
-balance = FALSE, B = 1000, ...)
+legend.labels = NULL, pts = TRUE, 
+balance = FALSE, trim = 0, B = 1000, ...)
 }
 \arguments{
-  \item{continuous}{Quantitative covariate that is being balanced within strata in a PSA. If \code{continuous} 
-  has three columns, then the second and third are assumed to be the treatment and strata respectively.  Missing values are not allowed. }
-  \item{treatment}{ Binary variable of same length as \code{continuous}; generally 0 for 'control,' 1 for 'treatment.' }
-  \item{strata}{ Integer variable (usually 1 - 5);  A vector of same length as continuous indicating the 
-  derived strata from estimated propensity scores. Generally 5 or 6 strata are used, but graph works 
-  reasonably well at least up to 10 strata.}
-  \item{boxwex}{ Numeric; controls width of boxes. Default = 0.17 }
-  \item{offset}{ Numeric; controls distance between the two boxes in each stratum. Default = 0.17 }
-  \item{col}{ Color vector for the control boxes, treatment boxes, and 
-  line connecting their means.  Default = \code{c("yellow", "orange", "black", "red", "darkorange3")}. }
-  \item{xlab}{ Label for the x-axis; default = \code{"Stratum"}.  Other standard labels may be used as well. }
-  \item{legend.xy}{ Binary vector giving coordinates of the legend. By default the legend is placed to the top left.  }
-  \item{legend.labels}{ Vector of labels for the legend; default = \code{c("Control", "Treatment", "C/T Means Connected")}}
+  \item{continuous}{Vector or N X 3 dataframe or matrix. If a vector, then represents the quantitative 
+     covariate that is being balanced within strata in a PSA. If \code{continuous}  
+     has three columns, then the second and third are assumed to be the \code{treatment} and \code{strata} respectively.  Missing values are not allowed. }
+  \item{treatment}{Binary vector of same length as \code{continuous} representing the two treatments; can be a character vector or factor. }
+  \item{strata}{A vector or factor of same length as \code{continuous} indicating the 
+     derived strata from estimated propensity scores. May be numeric or character vector, or factor. Strata are ordered lexicographically in plot.}
+  \item{boxwex}{Numeric; controls width of boxes. Default = 0.17 }
+  \item{offset}{Numeric; controls distance between the two boxes in each stratum. Default = 0.17 }
+  \item{col}{Color vector for the control boxes, treatment boxes, and 
+     line connecting their means.  Default = \code{c("yellow", "orange", "black", "red", "darkorange3")}. }
+  \item{xlab}{Label for the x-axis; default = \code{"Stratum"}.  Other standard labels may be used as well. }
+  \item{legend.xy}{Binary vector giving coordinates of the legend. By default the legend is placed to the top left.  }
+  \item{legend.labels}{Vector of labels for the legend;  default is essentially 
+  \code{c("Treatment (first)", "Treatment (second)", "Treatment Means Compared", 
+     "KS p-values", "Strata-Treatment Size")} where treatment names are taken from \code{treatment}.
+     Vector has four elements if \code{balance = FALSE}, ommitting "KS p-values".}
   \item{pts}{Logical; if \code{TRUE} then (jittered) points are added on top of the boxplots.}
   \item{balance}{Logical; if \code{TRUE} then \code{bal.ms.psa} provides a histogram of 
-  a permutation distribution and reference statstic to assess balance across strata; \code{bal.ks.psa} 
-  adds p-values to the graph derived from 2-sample Kologmorov-Smirnov tests of 
-  equivalence of control/treatment distributions within each stratum.}
+     a permutation distribution and reference statstic to assess balance across strata; \code{bal.ks.psa} 
+     adds p-values to the graph derived from 2-sample Kologmorov-Smirnov tests of 
+     equivalence of control/treatment distributions within each stratum.}
+  \item{trim}{If \code{balance=TRUE}, defines fraction (0 to 0.5) of observations to be trimmed from each end of stratum-treatment 
+    level before the mean is computed. See \code{\link{mean}}, \code{\link{bal.ms.psa}}.}
   \item{B}{Passed to \code{bal.ms.psa} if necessary, determines number of randomly generated 
-  comparison statistics.  Default =1000.}
+    comparison statistics.  Default =1000.}
   \item{\dots}{Other graphical parameters passed to \code{boxplot}.}
 }
 \details{Draws a pair of side by side boxplots for each stratum of a propensity score analysis.  

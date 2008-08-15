@@ -1,6 +1,6 @@
-cat.psa<-function(categorical, treatment=NULL, strata=NULL,
-    catnames=NULL, catcol="terrain.colors", width=.25, barlab=c("0","1"), barnames=c("Control","Treatment"),
-    rtmar=1.5, balance=FALSE, B=100, tbl=TRUE, cex.leg = 1,...)
+cat.psa<-function(categorical, treatment = NULL, strata = NULL,
+    catnames = NULL, catcol = "terrain.colors", width = .25, barlab = c("A","B"), barnames = NULL,
+    rtmar = 1.5, balance = FALSE, B = 1000, tbl = TRUE, cex.leg = 1, ...)
 {
 
 #categorical should be a categorical variable with levels 1:n
@@ -34,10 +34,13 @@ if(dim(as.data.frame(categorical))[2]==3){ treatment   <- categorical[,2]
                                            strata      <- categorical[,3]
                                            categorical <- categorical[,1]
                                          }
+cat.f<-as.factor(categorical)
+cat.levels<-levels(cat.f)
 
  table.cts<-table(categorical,treatment,strata)
  cat.dim<-dim(table.cts)[1]
  strata.dim<-dim(table.cts)[3]
+ if(is.null(catnames)&!is.factor(categorical)){catnames<-sort(unique(categorical))}
  if(is.null(catnames)){if(is.factor(categorical)){catnames<-levels(categorical)}else{catnames<-c(1:cat.dim)}}
  if(catcol[1]=="terrain.colors"){catcol<-terrain.colors(cat.dim)}
 
@@ -97,11 +100,14 @@ if(balance){bal.cs<-bal.cs.psa(categorical,treatment,strata,B=B)
            } 
 
 #Creating Graph
- xlimits<-range(as.numeric(strata))+c(-.5,rtmar)
+ xlimits<-c(.5,strata.dim+rtmar)
+ 
  plot(c(.5,2), type="n", log = "", axes=FALSE, xlim = xlimits, ylim = c(-.05,1.05),...)
  rect(x.l,y.b,x.r,y.t,col=catcol,lty="solid")
- axis(1,at=1:strata.dim)
+ axis(1,at=1:strata.dim, labels=sort(unique(strata)))
  axis(2,at=c(0,.5,1)) 
+ 
+ if(is.null(barnames)){barnames<-unlist(dimnames(table.cts)[2])}
  
  for(i in 1:strata.dim) {text  (i-.125,0, barlab[1], cex=.7, pos=1)}
  for(i in 1:strata.dim) {text  (i+.125,0, barlab[2], cex=.7, pos=1)}
@@ -122,10 +128,19 @@ if(balance){bal.cs<-bal.cs.psa(categorical,treatment,strata,B=B)
  if(tbl){
     Levels<-NULL
     numprop<-NULL
-    for(i in 1:strata.dim) {Levels<-c(Levels,i,i)}
-    Levels<-as.vector(Levels)
-    numprop<-round(rbind(Levels,prop.zo),3)
-    return(numprop)
+    tns<-NULL
+    t.names<-unlist(dimnames(table.cts)[2])
+    s.names<-unlist(dimnames(table.cts)[3])
+    for(i in 1:strata.dim){
+    for(j in 1:2){
+    tns<-c(tns,paste(t.names[j],":",s.names[i],sep=""))
+    }}
+    strata.names<-unlist(dimnames(table.cts)[3])
+    treatment.stratum.proportions<-round(prop.zo,3)
+    colnames(treatment.stratum.proportions)<-tns
+    out<-list(treatment.stratum.proportions)
+    names(out)<-c(paste("treatment",":","stratum",".proportions",sep=""))
+    return(out)
          }
 }
 

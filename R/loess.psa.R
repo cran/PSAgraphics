@@ -1,7 +1,7 @@
 loess.psa<-function(response, treatment = NULL, 
     propensity = NULL, family = "gaussian", span = .7, degree=1, minsize=5,
-    xlim=c(0,1),  colors = c("seagreen3", "goldenrod1", "seagreen4", "goldenrod3"), 
-    legend.xy = "topleft", legend = c("C", "T"), int = 15, lines = FALSE, rg = TRUE, 
+    xlim=c(0,1),  colors = c('dark blue','green','blue','dark green'), 
+    legend.xy = "topleft", legend = NULL, int = 15, lines = TRUE, rg = TRUE, 
     xlab="Estimated Propensity Scores", ylab="Response", pch = c(16,1), ...){
 
 #Creating a data frame to allow subsetting. 
@@ -11,39 +11,43 @@ if(is.vector(response)){
     rtp<-as.data.frame(response)
     dimnames(rtp)[2]<-list(c("response","treatment","propensity"))}
 
+if(is.null(treatment)){treatment<-response[,2]}
+sut<-sort(unique(treatment))
+
 response<-rtp[,1]    
 treatment<-rtp[,2]
 propensity<-rtp[,3]
 
 #Getting the loess estimates of response
-loess.0<-loess(rtp$r~rtp$p, subset = treatment == 0, family = family, span = span, degree=degree)
-loess.1<-loess(rtp$r~rtp$p, subset = treatment == 1, family = family, span = span, degree=degree)
+loess.0<-loess(rtp$r~rtp$p, subset = treatment == sut[1], family = family, span = span, degree=degree)
+loess.1<-loess(rtp$r~rtp$p, subset = treatment == sut[2], family = family, span = span, degree=degree)
 
 #Plotting points (propensity,response) by treatment levels 0 and 1
 plot(rtp$p,rtp$r,type="n",xlim=range(rtp$p),xlab=xlab,ylab=ylab)
-points(rtp$p[treatment==0],rtp$r[treatment==0],col=colors[1],pch = pch[1], ... )
-points(rtp$p[treatment==1],rtp$r[treatment==1],col=colors[2],pch = pch[2], ...)
+points(rtp$p[treatment==sut[1]],rtp$r[treatment==sut[1]],col=colors[1],pch = pch[1], ... )
+points(rtp$p[treatment==sut[2]],rtp$r[treatment==sut[2]],col=colors[2],pch = pch[2], ...)
 
-n0<-length(rtp$p[treatment==0])
-n1<-length(rtp$p[treatment==1])
-rtp.p.0<-rtp$p[treatment==0]
-rtp.p.1<-rtp$p[treatment==1]
+n0<-length(rtp$p[treatment==sut[1]])
+n1<-length(rtp$p[treatment==sut[2]])
+rtp.p.0<-rtp$p[treatment==sut[1]]
+rtp.p.1<-rtp$p[treatment==sut[2]]
 
 if(lines){ord.0<-order(rtp.p.0)
           ord.1<-order(rtp.p.1)
           lines(rtp.p.0[ord.0],loess.0$f[ord.0],cex=.6,col=colors[3], lwd = 1.5, lty = 1)
           lines(rtp.p.1[ord.1],loess.1$f[ord.1],col=colors[4], lwd = 1.5, lty = 2)}
-     else{points(rtp$p[treatment==0],loess.0$f,pch=3,cex=.6,col=colors[3])
-          points(rtp$p[treatment==1],loess.1$f,pch=4,cex=.6,col=colors[4])}
-          
+     else{points(rtp$p[treatment==sut[1]],loess.0$f,pch=3,cex=.6,col=colors[3])
+          points(rtp$p[treatment==sut[2]],loess.1$f,pch=4,cex=.6,col=colors[4])}
+
+if(is.null(legend)){legend<-sut}       
 legend(x = legend.xy, y = NULL, legend = legend, fill = colors[1:2], bty = "n")
 
 #Rug plots of propensity scores
 if(rg){
-    rug(rtp$p[treatment==0], ticksize=.02, side=1, col=colors[1])
-    rug(rtp$r[treatment==0], ticksize=.02, side=2, col=colors[1])
-    rug(rtp$p[treatment==1], ticksize=.02, side=3, col=colors[2]) 
-    rug(rtp$r[treatment==1], ticksize=.02, side=4, col=colors[2])
+    rug(rtp$p[treatment==sut[1]], ticksize=.02, side=1, col=colors[1])
+    rug(rtp$r[treatment==sut[1]], ticksize=.02, side=2, col=colors[1])
+    rug(rtp$p[treatment==sut[2]], ticksize=.02, side=3, col=colors[2]) 
+    rug(rtp$r[treatment==sut[2]], ticksize=.02, side=4, col=colors[2])
     box()                        
       }                              
 
@@ -105,6 +109,8 @@ nused.int<-sum(indicator.0*indicator.1)
 #And finally the calculator of the direct effect estimator
 
 out.table<-cbind(counts.0,counts.1,means.0,means.1,diff.means)
+colnames(out.table)<-c(paste("counts.",sut[1],sep=""), paste("counts.",sut[2],sep=""), 
+paste("means.",sut[1],sep=""), paste("means.",sut[1],sep=""), "diff.means")
 
 if(dp==0){dee <- sum((wts*diff.means),na.rm=TRUE)/sum(wts)
           sd.wt <- ((sum(sum.wtd.var))^.5)/nused.int}
@@ -175,10 +181,10 @@ if(flag) print(res)
 }
 
 #Rough 95 CI
-ci95<-c(dee-2*sd.wt,dee+2*sd.wt)
+CI95<-c(dee-2*sd.wt,dee+2*sd.wt)
 
-out<-list(dee, sd.wt, ci95, out.table)
-names(out)<-c("effect.size.est", "sd.wtd", "ci95", "summary.strata")
+out<-list(dee, sd.wt, CI95, out.table)
+names(out)<-c("effect.size.est", "sd.wtd", "CI95", "summary.strata")
 return(out)
                               }
 

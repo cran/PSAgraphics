@@ -1,5 +1,5 @@
-bal.ms.psa<-function(continuous, treatment=NULL, strata=NULL, B=1000, 
-main=NULL){
+bal.ms.psa<-function(continuous, treatment = NULL, strata = NULL, trim = 0, B = 1000, 
+main = NULL){
 
 #Compares means within randomly generated strata for a continuous covariate.
 #The analogue of bal.cs.psa
@@ -12,15 +12,15 @@ nstrat<-dim(table(strata))
 if(dim(as.data.frame(continuous))[2]==3){ treatment   <- continuous[,2]
                                            strata      <- continuous[,3]
                                            continuous <- continuous[,1]}
-                                           
+                                          
 
-meas.mns<-tapply(continuous,list(treatment,strata),mean)
+meas.mns<-tapply(continuous,list(treatment,strata),mean,trim=trim)
 sum.abs.diff.original<-sum((abs(meas.mns[1,]-meas.mns[2,]))*table(strata)/n)
 
 sum.abs.diff<-NULL
 for(i in 1:B){
 rstrat<-sample(strata,n)
-meas.mns<-tapply(continuous,list(treatment,rstrat),mean)
+meas.mns<-tapply(continuous,list(treatment,rstrat),mean,trim=trim)
 sum.abs.diff<-c(sum.abs.diff,sum((abs(meas.mns[1,]-meas.mns[2,]))*table(strata)/n))
              }
 

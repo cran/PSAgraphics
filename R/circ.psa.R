@@ -1,5 +1,5 @@
-circ.psa <- function(response, treatment = NULL, strata = NULL, summary = FALSE, statistic = "mean", 
-    revc = FALSE, sw = 0.4, ne=.5, inc = 0.35, 
+circ.psa <- function(response, treatment = NULL, strata = NULL, summary = FALSE, statistic = "mean", trim = 0,
+    revc = FALSE, confint = TRUE, sw = 0.4, ne=.5, inc = 0.35, 
     pw = 0.4, lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, main = NULL){
 
 # Given 'treatment' (0=Control, 1=Treatment), function calculates 'statistic' 
@@ -41,6 +41,10 @@ par(mai = c(1, 1.7, 1, 1.7), pty="s")
 if(dim(as.data.frame(response))[2]==3){treatment   <- response[,2]
                                        strata      <- response[,3]
                                        response    <- response[,1]}
+
+tr.mean<-function(x){mean(x,trim=trim)}
+if(!trim==0){statistic<-tr.mean}
+
 if(!summary){                                       
 n <- length(response)
 nstrat <- dim(table(strata))
@@ -49,9 +53,9 @@ ncontrol <- as.data.frame(table(strata,treatment))[1:nstrat,3]
 ntreat <- as.data.frame(table(strata,treatment))[(nstrat+1):(2*nstrat),3]
 summary.strata <- cbind(ncontrol,ntreat,ct.means)}else{
 summary.strata <- response
-ct.means<-response[,3:4]
-n<-sum(response[,1:2])
-nstrat<-length(response[,1])} 
+ct.means <- response[,3:4]
+n <- sum(response[,1:2])
+nstrat <- length(response[,1])}
 wts<-rowSums(summary.strata[,1:2])
 
 #Defining variables (reversed if called); 
@@ -60,7 +64,7 @@ x <- ct.means[,1]
 y <- ct.means[,2]
 if(revc){x <- ct.means[,2]
          y <- ct.means[,1]}
-d <- y- x  
+d <- y - x  
 
 #Upper and lower bound of plot; 
 #Constants 'sw' and 'ne' may need modification to assure a pleasing appearance
@@ -75,6 +79,7 @@ upb <- max.xy + .5 * sw * (max.xy - min.xy)
 diff.wtd <- sum(d * wts)/n
 
 #Calculating the weighted st.dev using Conniffe's definition
+#Note: 7/30/8: really calculating the standard error here, though I've called it st.dev.
 if(!summary){
 o<-order(treatment)
 ord.strata<-strata[o]
@@ -92,10 +97,17 @@ var.1<-tapply(ord.response[ncp1:ncpnt],ord.strata[ncp1:ncpnt],var)
 ni.1<-table(ord.strata[ncp1:ncpnt])
 frac.1<-var.1/ntreat
 
-sd.wtd<-((sum(frac.0) + sum(frac.1))^.5)/nstrat
+se.wtd<-((sum(frac.0) + sum(frac.1))^.5)/nstrat
+             
+strat.labels<-sort(unique(strata))             
              }
-#If data are summarized, can't calculate sd.wtd.
-if(summary) sd.wtd<-NULL
+                          
+#If data are summarized, can't calculate se.wtd.
+if(summary){
+se.wtd<-NULL
+strat.labels<-rownames(response)
+}
+
 
 #Finding radii and plotting circles
 wtt <- wts/max(wts)
@@ -104,7 +116,7 @@ radii <- (abs(dfrng/20)) * wtt
 symbols(x, y, circles = radii^pw, inches = inc, xlim = c(lwb, upb), ylim = 
             c(lwb,upb), cex = 0.86, xlab = "", ylab = "", main = main, lwd=1.5)
 if(lab){for(i in 1:nstrat){
-        legend(x[i], y[i], i, bty="n", xjust=.71, yjust=.48, cex=labcex)}}
+        legend(x[i], y[i], strat.labels[i], bty="n", xjust=.71, yjust=.48, cex=labcex)}}
 
 #Y=X line and parallel line representing weighted mean difference
 abline(0, 1, lwd = 2)
@@ -134,20 +146,47 @@ rug(y, side = 4)
 
 #Labels for axes
    dimnamez <- NULL
+   dimnamezz <- unlist(dimnames(ct.means)[2])
    dimnamez <- unlist(dimnames(ct.means)[2])
    if(revc) dimnamez <- dimnamez[c(2, 1)]
    if(is.null(xlab)){title(xlab = unlist(dimnamez)[1])}else{title(xlab = xlab)}
    if(is.null(ylab)){title(ylab = unlist(dimnamez)[2])}else{title(ylab = ylab)}
 
-C.wtd <- mnx; T.wtd <- mny
-if(revc){C.wtd <- mny; T.wtd <- mnx}
-if(revc){diff.wtd<-(-1*diff.wtd)}
+Cname<-unlist(dimnamez)[1]
+Tname<-unlist(dimnamez)[2]
 
-approx.t<-diff.wtd/sd.wtd
+C.wtd <- mnx; T.wtd <- mny
+
+#if(!revc){diff.wtd<-(-1*diff.wtd)}
+
+approx.t<-diff.wtd/se.wtd
 df<-n-2*nstrat
+
+if(!summary){colnames(summary.strata)<-c(paste("n.",dimnamezz[1],sep=""),paste("n.",dimnamezz[2],sep=""),
+              paste("means.",dimnamezz[1],sep=""),paste("means.",dimnamezz[2],sep=""))}
+
+out <- list(summary.strata, C.wtd, T.wtd, diff.wtd, se.wtd, approx.t = approx.t, df = df)
+names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep=""),paste(Tname,".wtd.Mn",sep=""),"diff.wtd","se.wtd","approx.t","df") 
+           
+#Putting the CI below the cross plot
+if(confint){
+ci.diff<- -diff.wtd
+#if(revc==FALSE)ci.diff<- -ci.diff
+ci<-c(ci.diff-qt(.975,df)*se.wtd,ci.diff+qt(.975,df)*se.wtd)
+ci.out<--ci[c(2,1)]
+xl<-.75*lwb+.25*upb-ext+ci[1]/2
+yl<-.75*lwb+.25*upb-ext-ci[1]/2
+xu<-.75*lwb+.25*upb-ext+ci[2]/2
+yu<-.75*lwb+.25*upb-ext-ci[2]/2
+segments(xl,yl,xu,yu,lwd=5,col="green3")
+segments(xl-.05*ext+.7*ext/2,yl+.05*ext+.7*ext/2,xl-.05*ext-.7*ext/2,yl+.05*ext-.7*ext/2,lwd=2,col="green3")
+segments(xu+.05*ext+.7*ext/2,yu-.05*ext+.7*ext/2,xu+.05*ext-.7*ext/2,yu-.05*ext-.7*ext/2,lwd=2,col="green3")
+out <- list(summary.strata, C.wtd, T.wtd, diff.wtd, se.wtd, approx.t, df, ci.out)
+names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep="",collapse=""),paste(Tname,".wtd.Mn",sep=""),"diff.wtd","se.wtd","approx.t","df","CI.95")
+
+           }           
                       
-out <- list(summary.strata=summary.strata, C.wtd=C.wtd, T.wtd=T.wtd, diff.wtd=diff.wtd, sd.wtd=sd.wtd,
-            approx.t = approx.t, df = df)
+
 return(out)
 }
 

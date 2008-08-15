@@ -8,11 +8,13 @@ bal.ks.psa<-function(continuous,treatment=NULL,strata=NULL){
 if(dim(as.data.frame(continuous))[2]==3){ treatment   <- continuous[,2]
                                            strata      <- continuous[,3]
                                            continuous <- continuous[,1]}
-
 nstrat<-dim(table(strata))
+strat.f<-as.factor(strata)
+levels(strat.f)<-1:nstrat
+
 ks<-NULL
 for(j in 1:nstrat){
-kol.sm<-ks.test(continuous[treatment==1&strata==j],continuous[treatment==0&strata==j])
+kol.sm<-ks.test(continuous[treatment==unique(treatment)[1]&strat.f==j],continuous[treatment==unique(treatment)[2]&strat.f==j])
 ks[j]<-kol.sm$p
 }
 return(ks)
