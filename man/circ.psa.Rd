@@ -1,7 +1,7 @@
 \name{circ.psa}
 \alias{circ.psa}
 \title{Generates a Propensity Score Assessment Plot}
-\description{Display a graphic that summarizes outcomes in a propensity score analysis, based on strata that have been 
+\description{Displays a graphic that summarizes outcomes in a propensity score analysis, based on strata that have been 
 defined in the first Phase of a propensity score analysis (PSA).  The graphic displays contributions of individual 
 strata to the overall effect, weighing contributions of individual strata according to the relative 
 sizes of the respective strata. The overall effect is plotted as a heavy diagonal line that runs parallel to the identity diagonal.
@@ -47,8 +47,8 @@ pw = 0.4, lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, main = NULL)
 control and treatment groups, as well as (possibly trimmed) mean response values for control and treatment.}
 \item{(Name1).wtd.Mn}{Weighted mean of response for (Name1) group.  Name taken from \code{treatment}.}
 \item{(Name2).wtd.Mn}{Weighted mean of response for (Name2) group.  Name taken from \code{treatment}.}
-\item{diff.wtd}{Direct adjustment estimator.}
-\item{se.wtd}{Weighted standard error for \code{diff.wtd}}
+\item{dae}{Direct adjustment estimator.}
+\item{se.wtd}{Weighted standard error for \code{dae}}
 \item{approx.t}{Ratio of the direct adjusted estimaor and a standard error based on weighting of straum variances.}
 \item{df}{Estimate of degree of freedom; response vector length minus twice number of strata.}
 \item{CI.95}{Approximate 95\% confidence interval for overall effect size.}
@@ -72,7 +72,7 @@ calculations are likely to become less trustworthy as larger values of the trim 
 \author{James E. Helmreich \email{ James.Helmreich@Marist.edu}
 
  Robert M. Pruzek \email{RMPruzek@yahoo.com}}
-\seealso{\code{loess.psa}}
+\seealso{\code{\link{loess.psa}}}
 \examples{
 ##Random data with effect size 0
 response <- rnorm(1000)

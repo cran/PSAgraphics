@@ -45,9 +45,9 @@ ylab = "Response", pch = c(16,1), ...)
   \item{\dots}{Optional parameters passed to points command.}
 }
 \value{In addition to the plot, the function returns a list with the following components: 
-  \item{effect.size.est}{Estimated effect size based upon (number of) strata defined by \code{int}; that is, 
+  \item{dae}{Estimated effect size based upon (number of) strata defined by \code{int}; that is, 
   this is the Direct Adjustment Estimate of the treatment effect, after propensity-based adjustment.}
-  \item{sd.wtd}{Weighted standard deviation based on pooling of within-strata variance estimates.}
+  \item{se.wtd}{Weighted standard error based on pooling of within-strata variance estimates.}
   \item{CI.95}{Approximate 95\% confidence interval for the overall effect size (conditional on the specification of \code{int}).}
   \item{summary.strata}{A table with rows corresponding to strata; first two columns show
   counts (by statum) for both control and treatment; followed by mean differences for all strata. 

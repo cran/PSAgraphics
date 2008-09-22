@@ -165,8 +165,10 @@ df<-n-2*nstrat
 if(!summary){colnames(summary.strata)<-c(paste("n.",dimnamezz[1],sep=""),paste("n.",dimnamezz[2],sep=""),
               paste("means.",dimnamezz[1],sep=""),paste("means.",dimnamezz[2],sep=""))}
 
+#Note: changed out name of diff.wtd to dae, did not change internal name diff.wtd.
+
 out <- list(summary.strata, C.wtd, T.wtd, diff.wtd, se.wtd, approx.t = approx.t, df = df)
-names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep=""),paste(Tname,".wtd.Mn",sep=""),"diff.wtd","se.wtd","approx.t","df") 
+names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep=""),paste(Tname,".wtd.Mn",sep=""),"dae","se.wtd","approx.t","df") 
            
 #Putting the CI below the cross plot
 if(confint){
@@ -182,7 +184,7 @@ segments(xl,yl,xu,yu,lwd=5,col="green3")
 segments(xl-.05*ext+.7*ext/2,yl+.05*ext+.7*ext/2,xl-.05*ext-.7*ext/2,yl+.05*ext-.7*ext/2,lwd=2,col="green3")
 segments(xu+.05*ext+.7*ext/2,yu-.05*ext+.7*ext/2,xu+.05*ext-.7*ext/2,yu-.05*ext-.7*ext/2,lwd=2,col="green3")
 out <- list(summary.strata, C.wtd, T.wtd, diff.wtd, se.wtd, approx.t, df, ci.out)
-names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep="",collapse=""),paste(Tname,".wtd.Mn",sep=""),"diff.wtd","se.wtd","approx.t","df","CI.95")
+names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep="",collapse=""),paste(Tname,".wtd.Mn",sep=""),"dae","se.wtd","approx.t","df","CI.95")
 
            }           
                       

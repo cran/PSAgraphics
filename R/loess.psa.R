@@ -184,7 +184,7 @@ if(flag) print(res)
 CI95<-c(dee-2*sd.wt,dee+2*sd.wt)
 
 out<-list(dee, sd.wt, CI95, out.table)
-names(out)<-c("effect.size.est", "sd.wtd", "CI95", "summary.strata")
+names(out)<-c("dae", "se.wtd", "CI95", "summary.strata")
 return(out)
                               }
 
