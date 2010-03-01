@@ -6,8 +6,8 @@ groups for a continuous covariate from user defined strata. This statistic is co
 for randomly permuted strata.
 }
 \usage{
-bal.ms.psa(continuous, treatment = NULL, strata = NULL, trim = 0, B = 1000, 
-main = NULL)
+bal.ms.psa(continuous, treatment = NULL, strata = NULL, 
+trim = 0, B = 1000, main = NULL)
 }
 \arguments{
   \item{continuous}{Quantitative covariate that is being balanced within strata in a PSA. 

@@ -1,7 +1,8 @@
 loess.psa<-function(response, treatment = NULL, 
     propensity = NULL, family = "gaussian", span = .7, degree=1, minsize=5,
-    xlim=c(0,1),  colors = c('dark blue','green','blue','dark green'), 
-    legend.xy = "topleft", legend = NULL, int = 15, lines = TRUE, rg = TRUE, 
+    xlim=c(0,1),  colors = c('dark blue','dark green','blue','dark green'), 
+    legend.xy = "topleft", legend = NULL, int = 10, 
+    lines = TRUE, strata.lines = TRUE, rg = TRUE, 
     xlab="Estimated Propensity Scores", ylab="Response", pch = c(16,1), ...){
 
 #Creating a data frame to allow subsetting. 
@@ -26,6 +27,14 @@ loess.1<-loess(rtp$r~rtp$p, subset = treatment == sut[2], family = family, span 
 plot(rtp$p,rtp$r,type="n",xlim=range(rtp$p),xlab=xlab,ylab=ylab)
 points(rtp$p[treatment==sut[1]],rtp$r[treatment==sut[1]],col=colors[1],pch = pch[1], ... )
 points(rtp$p[treatment==sut[2]],rtp$r[treatment==sut[2]],col=colors[2],pch = pch[2], ...)
+li<-length(int)
+if(strata.lines){int2 <- int 
+	if(li == 1){int2 <- quantile(propensity, seq(0, 1, 1/int))
+		        li <- length(int2)
+		       }
+	for(i in 1:li){abline(v = int2[i], lwd = .5, lty =  3, col = "dark grey")}
+		       }
+
 
 n0<-length(rtp$p[treatment==sut[1]])
 n1<-length(rtp$p[treatment==sut[2]])
@@ -54,7 +63,7 @@ if(rg){
 ##Getting Loess based estimate of effect size.
 
 #Divide up (0,1) into int subintervals
-ed<-length(int)
+ed <- length(int)
 if(ed==1){prop.labels<-as.numeric(cut(propensity, quantile(propensity, seq(0, 1, 1/int)),
       include.lowest = TRUE, labels = FALSE)); nint<-int; dp<-0}
 if(ed>1){
@@ -63,7 +72,8 @@ if(ed>1){
   if(int[1]==0 & int[ed] <1){subints<-c(int,1); nint<-ed; dp<-2}
   if(int[1] >0 & int[ed] <1){subints<-c(0,int,1); nint<-ed+1; dp<-3}
   prop.labels<-as.numeric(cut(propensity,breaks=subints,include.lowest = TRUE, labels = FALSE))
-        }
+        }     
+
 #Checking for empty T/C strata
 table.plt<-table(prop.labels,treatment)
 ttable.plt<-table.plt[,1]*table.plt[,2]
@@ -110,7 +120,7 @@ nused.int<-sum(indicator.0*indicator.1)
 
 out.table<-cbind(counts.0,counts.1,means.0,means.1,diff.means)
 colnames(out.table)<-c(paste("counts.",sut[1],sep=""), paste("counts.",sut[2],sep=""), 
-paste("means.",sut[1],sep=""), paste("means.",sut[1],sep=""), "diff.means")
+paste("means.",sut[1],sep=""), paste("means.",sut[2],sep=""), "diff.means")
 
 if(dp==0){dee <- sum((wts*diff.means),na.rm=TRUE)/sum(wts)
           sd.wt <- ((sum(sum.wtd.var))^.5)/nused.int}
@@ -184,7 +194,7 @@ if(flag) print(res)
 CI95<-c(dee-2*sd.wt,dee+2*sd.wt)
 
 out<-list(dee, sd.wt, CI95, out.table)
-names(out)<-c("dae", "se.wtd", "CI95", "summary.strata")
+names(out)<-c("ATE", "se.wtd", "CI95", "summary.strata")
 return(out)
                               }
 

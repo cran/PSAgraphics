@@ -11,9 +11,10 @@ provided, for both description and inference.  Graphic motivated by a suggestion
 loess.psa(response, treatment = NULL, propensity = NULL, 
 family = "gaussian", 
 span = 0.7, degree = 1, minsize = 5, xlim = c(0, 1), 
-colors = c('dark blue','green','blue','dark green'), 
+colors = c('dark blue','dark green','blue','dark green'), 
 legend.xy = "topleft", legend = NULL,
-int = 15, lines = TRUE, rg = TRUE, xlab = "Estimated Propensity Scores", 
+int = 10, lines = TRUE, strata.lines = TRUE, rg = TRUE, 
+xlab = "Estimated Propensity Scores", 
 ylab = "Response", pch = c(16,1), ...)
 }
 \arguments{
@@ -34,8 +35,9 @@ ylab = "Response", pch = c(16,1), ...)
   \item{legend}{Binary character vector containing the text of the legend.  Default is taken from \code{treatment}.} 
   \item{int}{Integer or ordered vector.  If an integer is used, it represents the maximum number of equally sized strata.  
      Alternatively, it may be a vector of cuts of the unit interval. Lower and upper ends need not be included.  
-     See examples. Default = 15.}
+     See examples. Default = 10.}
   \item{lines}{Logical; fitted loess values are plotted by default as points.  If true, values are plotted as two lines.}
+  \item{strata.lines}{Logical; default = \code{TRUE}.  Creates light vertical lines that delineate strata.}
   \item{rg}{Logical; if \code{TRUE} (default) then rug plots are given for treatment and control propensity score and
      response distributions.}
   \item{xlab}{X axis label, default = \code{"Estimated Propensity Scores"}.}
@@ -45,8 +47,8 @@ ylab = "Response", pch = c(16,1), ...)
   \item{\dots}{Optional parameters passed to points command.}
 }
 \value{In addition to the plot, the function returns a list with the following components: 
-  \item{dae}{Estimated effect size based upon (number of) strata defined by \code{int}; that is, 
-  this is the Direct Adjustment Estimate of the treatment effect, after propensity-based adjustment.}
+  \item{ATE}{Estimated effect size based upon (number of) strata defined by \code{int}; that is, 
+  this is the Average Treatment Effect, after propensity-based adjustment.}
   \item{se.wtd}{Weighted standard error based on pooling of within-strata variance estimates.}
   \item{CI.95}{Approximate 95\% confidence interval for the overall effect size (conditional on the specification of \code{int}).}
   \item{summary.strata}{A table with rows corresponding to strata; first two columns show
@@ -62,14 +64,15 @@ ylab = "Response", pch = c(16,1), ...)
 \seealso{\code{\link{circ.psa}}}
 
 \examples{
-#Artificial example where DAE should be 1.5 over all of (0,1).
-#Over the 4 subintervals provided should be 1.5 as well as is 
-#symmetric about .5
-response <- c(rep(1,150), rep(2,150), rep(0,300))
-treatment <- c(rep(1,300), rep(0,300))
+#Artificial example where ATE should be 1 over all of (0,1).
+response1 <- c(rep(1, 100), rep(2, 100), rep(3, 100)) + rnorm(300, 0, .5)
+response0 <- c(rep(0, 100), rep(1, 100), rep(2, 100)) + rnorm(300, 0, .5)
+response <- c(response1, response0)
+treatment <- c(rep(1, 300), rep(0, 300))
 propensity <- rep(seq(.01, .99, (.98/299)), 2)
 a <- data.frame(response, treatment, propensity)
-loess.psa(a, span = .15, degree = 1, int = c(.1, .3, .5, .7, .9))
+loess.psa(a, span = .15, degree = 1, int = c(0, .33, .67, 1))
+
 
 #Artificial example where estimates are unstable with varying 
 #numbers of strata. Note: sometimes get empty treatment/strata error.
@@ -90,9 +93,7 @@ lindner.ps <- glm(abcix ~ stent + height + female +
       data = lindner, family = binomial)
 loess.psa(log(cardbill), abcix, lindner.ps$fitted,  
          int = c(.37, .56, .87, 1), lines = TRUE)
-         abline(v=.37)
-         abline(v=.56)
-         abline(v=.87)
-}
+         abline(v=c(.37, 56, .87))
+         }
 \keyword{ hplot }
 

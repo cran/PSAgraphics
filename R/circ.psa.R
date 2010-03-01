@@ -1,6 +1,8 @@
-circ.psa <- function(response, treatment = NULL, strata = NULL, summary = FALSE, statistic = "mean", trim = 0,
-    revc = FALSE, confint = TRUE, sw = 0.4, ne=.5, inc = 0.35, 
-    pw = 0.4, lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, main = NULL){
+circ.psa <- function(response, treatment = NULL, strata = NULL, 
+    summary = FALSE, statistic = "mean", trim = 0,
+    revc = FALSE, confint = TRUE, sw = 0.4, ne = .5, inc = 0.25, 
+    pw = 0.4, lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, 
+    main = NULL){
 
 # Given 'treatment' (0=Control, 1=Treatment), function calculates 'statistic' 
 # for response within strata and treatment levels. Within strata, 'statistic' is 
@@ -29,8 +31,6 @@ circ.psa <- function(response, treatment = NULL, strata = NULL, summary = FALSE,
 # 'pw'  controls relative circle sizes.
 # 'lab' labels circles with strata number.
 # 'labcex' controls the size of the axes labels.
-
-# Please REPORT experiences/suggestions for editing: 'rmpruzek@yahoo.com' or 'james.helmreich@marist.edu' ..w/ thanks!
 
 #Setting margins, forcing square plot to aid interpretations (saving current settings; restore settings at end).
 op <- par(no.readonly = TRUE)
@@ -131,14 +131,14 @@ abline(h = mny, v = mnx, lty = 3, col = 2)
 
 #Dashed lines from circles to perpendicular cross line in lower left corner
 kp <- (3*lwb+upb)/4
-ex <- .015*(upb-lwb)
-for(i in 1:nstrat){segments(kp - d[i]/2 + ex,kp + d[i]/2 + ex,x[i],y[i],lty = 2, lwd = 1.6)
-                   points(kp - d[i]/2 + ex, kp + d[i]/2 + ex, pch= 3,lwd=1.4, col = 4,cex=1.7)
+ex <- .008*(upb-lwb)
+for(i in 1:nstrat){segments(kp - d[i]/2 + ex,kp + d[i]/2 + ex, x[i], y[i], lty = 2, lwd = .8)
+                   points(kp - d[i]/2 + ex, kp + d[i]/2 + ex, pch = 3,lwd = 1.4, col = 4, cex = 1.7)
                   }
               
 #Perpendicular cross segment: location fixed to lower quarter of plot
 ext <- .025*(upb-lwb)
-segments((lwb+upb)/2+ext,lwb-ext,lwb-ext,(lwb+upb)/2+ext,lwd=2)
+segments((lwb + upb)/2 + ext, lwb - ext,lwb - ext, (lwb + upb)/2 + ext, lwd = 2)
 
 #Rug plots of centers of circles, ie strata means
 rug(x, side = 3)
@@ -165,10 +165,10 @@ df<-n-2*nstrat
 if(!summary){colnames(summary.strata)<-c(paste("n.",dimnamezz[1],sep=""),paste("n.",dimnamezz[2],sep=""),
               paste("means.",dimnamezz[1],sep=""),paste("means.",dimnamezz[2],sep=""))}
 
-#Note: changed out name of diff.wtd to dae, did not change internal name diff.wtd.
+#Note: changed out name of diff.wtd to ATE, did not change internal name diff.wtd.
 
 out <- list(summary.strata, C.wtd, T.wtd, diff.wtd, se.wtd, approx.t = approx.t, df = df)
-names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep=""),paste(Tname,".wtd.Mn",sep=""),"dae","se.wtd","approx.t","df") 
+names(out)<-c("summary.strata",paste("wtd.Mn.",Cname,sep=""),paste("wtd.Mn.",Tname,sep=""),"ATE","se.wtd","approx.t","df") 
            
 #Putting the CI below the cross plot
 if(confint){
@@ -184,7 +184,7 @@ segments(xl,yl,xu,yu,lwd=5,col="green3")
 segments(xl-.05*ext+.7*ext/2,yl+.05*ext+.7*ext/2,xl-.05*ext-.7*ext/2,yl+.05*ext-.7*ext/2,lwd=2,col="green3")
 segments(xu+.05*ext+.7*ext/2,yu-.05*ext+.7*ext/2,xu+.05*ext-.7*ext/2,yu-.05*ext-.7*ext/2,lwd=2,col="green3")
 out <- list(summary.strata, C.wtd, T.wtd, diff.wtd, se.wtd, approx.t, df, ci.out)
-names(out)<-c("summary.strata",paste(Cname,".wtd.Mn",sep="",collapse=""),paste(Tname,".wtd.Mn",sep=""),"dae","se.wtd","approx.t","df","CI.95")
+names(out)<-c("summary.strata",paste("wtd.Mn.",Cname,sep="",collapse=""),paste("wtd.Mn.",Tname,sep=""),"ATE","se.wtd","approx.t","df","CI.95")
 
            }           
                       

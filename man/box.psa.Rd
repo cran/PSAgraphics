@@ -5,7 +5,8 @@
 \code{box.psa} draws pairs of side by side boxplots corresponding to control and treatment for each stratum.}
 \usage{
 box.psa(continuous, treatment = NULL, strata = NULL, boxwex = 0.17, 
-offset = 0.17, col = c("yellow", "orange", "black", "red", "darkorange3"),
+offset = 0.17, 
+col = c("yellow", "orange", "black", "red", "darkorange3"),
 xlab = "Stratum", legend.xy = NULL, 
 legend.labels = NULL, pts = TRUE, 
 balance = FALSE, trim = 0, B = 1000, ...)
@@ -19,8 +20,9 @@ balance = FALSE, trim = 0, B = 1000, ...)
      derived strata from estimated propensity scores. May be numeric or character vector, or factor. Strata are ordered lexicographically in plot.}
   \item{boxwex}{Numeric; controls width of boxes. Default = 0.17 }
   \item{offset}{Numeric; controls distance between the two boxes in each stratum. Default = 0.17 }
-  \item{col}{Color vector for the control boxes, treatment boxes, and 
-     line connecting their means.  Default = \code{c("yellow", "orange", "black", "red", "darkorange3")}. }
+  \item{col}{Default = \code{c("yellow", "orange", "black", "red", 
+  		"darkorange3")}. Color vector for the control boxes, treatment boxes, and 
+     line connecting their means.   }
   \item{xlab}{Label for the x-axis; default = \code{"Stratum"}.  Other standard labels may be used as well. }
   \item{legend.xy}{Binary vector giving coordinates of the legend. By default the legend is placed to the top left.  }
   \item{legend.labels}{Vector of labels for the legend;  default is essentially 
@@ -43,7 +45,7 @@ This allows visual comparisons within strata of the distribution of the given co
 and comparisons between strata as well.  The number of observations in each boxplot are 
 given below each box, and the means of paired treatment and control groups are connected.}
 
-\author{James E. Helmreich \email{ James.Helmreich@Marist.edu}
+\author{James E. Helmreich \email{James.Helmreich@Marist.edu}
 
  Robert M. Pruzek \email{RMPruzek@yahoo.com}}
 
@@ -63,7 +65,8 @@ lindner.ps <- glm(abcix ~ stent + height + female +
 ps<-lindner.ps$fitted
 lindner.s5 <- as.numeric(cut(ps, quantile(ps, seq(0, 1, 1/5)),
       include.lowest = TRUE, labels = FALSE))
-box.psa(ejecfrac, abcix, lindner.s5, xlab = "ejecfrac", legend.xy = c(3.5,110))
+box.psa(ejecfrac, abcix, lindner.s5, xlab = "ejecfrac", 
+      legend.xy = c(3.5,110))
 
 lindner.s10 <- as.numeric(cut(ps, quantile(ps, seq(0, 1, 1/5)),
       include.lowest = TRUE, labels = FALSE))

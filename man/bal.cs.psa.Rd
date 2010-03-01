@@ -11,7 +11,8 @@ bal.cs.psa(categorical, treatment = NULL, strata = NULL, B = 1000,
 }
 \arguments{
   \item{categorical}{Categorical covariate that is being balanced within strata 
-  in a PSA. If \code{categorical} has three columns, then the second and third
+  in a PSA. If 
+  \code{categorical} has three columns, then the second and third
   are assumed to be the treatment and strata respectively.  Missing values are
   not allowed. May be factor or numeric. }
  \item{treatment}{Binary variable of same length as \code{categorical}; generally 0 for 'control,' 1 for 'treatment.' }

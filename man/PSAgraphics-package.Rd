@@ -17,13 +17,15 @@ A collection of functions that primarily produce graphics to aid in a
 \details{
 \tabular{ll}{
 Package: \tab PSAgraphics\cr
-Version: \tab 1.1\cr
+Version: \tab 2.0\cr
 License: \tab GPL (>= 2)\cr
 }
 }
 
 \author{
-James E. Helmreich <James.Helmreich@Marist.edu> and Robert M. Pruzek <RMPruzek@yahoo.com> 
+James E. Helmreich <James.Helmreich@Marist.edu> and 
+
+Robert M. Pruzek <RMPruzek@yahoo.com> 
 
 Maintainer: James E. Helmreich <James.Helmreich@Marist.edu>
 }
@@ -37,7 +39,11 @@ Maintainer: James E. Helmreich <James.Helmreich@Marist.edu>
 \code{\link{loess.psa}}
 \code{\link{bal.ks.psa}}
 \code{\link{bal.ms.psa}}
+
 \code{\link{bal.fe.psa}}
+\code{\link{cstrata.psa}}
+\code{\link{cv.trans.psa}}
+\code{\link{cv.bal.psa}}
 }
 
 

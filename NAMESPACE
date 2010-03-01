@@ -1,1 +1,1 @@
-export(cat.psa, box.psa, loess.psa, circ.psa, bal.ks.psa, bal.cs.psa, bal.fe.psa, bal.ms.psa)
+export(cat.psa, box.psa, loess.psa, circ.psa, bal.ks.psa, bal.cs.psa, bal.fe.psa, bal.ms.psa, cv.bal.psa, cstrata.psa, cv.trans.psa)

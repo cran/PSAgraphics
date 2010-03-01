@@ -23,7 +23,7 @@ from a Propensity Score Analysis.
 p-values from the KS-test of equivalence of distributions for each stratum-treatment
 pair.
 }
-\author{James E. Helmreich \email{ James.Helmreich@Marist.edu}
+\author{James E. Helmreich \email{James.Helmreich@Marist.edu}
 
  Robert M. Pruzek \email{RMPruzek@yahoo.com}}
 \seealso{ \code{bal.ms.psa}, \code{bal.cs.psa}, \code{bal.cws.psa} }

@@ -4,21 +4,22 @@
 \description{Displays a graphic that summarizes outcomes in a propensity score analysis, based on strata that have been 
 defined in the first Phase of a propensity score analysis (PSA).  The graphic displays contributions of individual 
 strata to the overall effect, weighing contributions of individual strata according to the relative 
-sizes of the respective strata. The overall effect is plotted as a heavy diagonal line that runs parallel to the identity diagonal.
+sizes of the respective strata. The overall effect is plotted as a heavy dashed diagonal line that runs parallel to the identity diagonal.
 }
 \usage{
-circ.psa(response, treatment = NULL, strata = NULL, summary = FALSE, 
-statistic = "mean", trim = 0, revc = FALSE, confint = TRUE, sw = 0.4, ne = 0.5, inc = 0.35, 
-pw = 0.4, lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, main = NULL)
+circ.psa(response, treatment = NULL, strata = NULL, 
+summary = FALSE, statistic = "mean", trim = 0, revc = FALSE, 
+confint = TRUE, sw = 0.4, ne = 0.5, inc = 0.25, pw = 0.4, 
+lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, main = NULL)
 }
 \arguments{
  \item{response}{Either a numeric vector containing the response of interest in a 
       propensity score analysis, or a three column array containing response, treatment and strata.}
  \item{treatment}{Binary variable of same length as \code{response}; generally 0 for 'control,' 1 for 'treatment'. 
       A character vector with two labels or factor with two levels are also accepted.}
- \item{strata}{Integer variable;  a vector of same length as \code{response} indicating the 
+ \item{strata}{Generally integer variable;  a vector of same length as \code{response} indicating the 
       derived strata from estimated propensity scores. Generally 5 or 6 strata used, but function is effective 
-      for more strata.}
+      for more strata. In the case when strata are defined via unique propensity scores (as from a tree), user may wish to define strata using \code{factor}.}
  \item{summary}{Logical (default \code{FALSE}).  If \code{TRUE} then \code{response} must have rows corresponding to number of strata; 
       the first two columns should contain treatment and control group sizes for each stratum, and the pair of columns 
       should contain the appropriate summary statistics for each statum.  For example, the four summary columns might have been 
@@ -45,31 +46,31 @@ pw = 0.4, lab = TRUE, labcex = 1, xlab = NULL, ylab = NULL, main = NULL)
 \value{Generate a Propensity Assessment Plot, as well as numerical data for 
 \item{summary.strata}{An array with rows corresponding to strata and four columns; these show counts for 
 control and treatment groups, as well as (possibly trimmed) mean response values for control and treatment.}
-\item{(Name1).wtd.Mn}{Weighted mean of response for (Name1) group.  Name taken from \code{treatment}.}
-\item{(Name2).wtd.Mn}{Weighted mean of response for (Name2) group.  Name taken from \code{treatment}.}
-\item{dae}{Direct adjustment estimator.}
-\item{se.wtd}{Weighted standard error for \code{dae}}
-\item{approx.t}{Ratio of the direct adjusted estimaor and a standard error based on weighting of straum variances.}
+\item{wtd.Mn.(Name1)}{Weighted mean of response for (Name1) group.  Name taken from \code{treatment}.}
+\item{wtd.Mn.(Name2)}{Weighted mean of response for (Name2) group.  Name taken from \code{treatment}.}
+\item{ATE}{Average Treatment Effect.}
+\item{se.wtd}{Weighted standard error for \code{ATE}}
+\item{approx.t}{Ratio of the average treatement effect and a standard error based on weighting of stratum variances.}
 \item{df}{Estimate of degree of freedom; response vector length minus twice number of strata.}
 \item{CI.95}{Approximate 95\% confidence interval for overall effect size.}
 }
 
 \details{A circle is plotted for each stratum, centered on the means for the treatment and 
-control groups (for the \code{X} and \code{Y} axes) respectively. The size of the circle 
-corresponds to the size of the stratum. A diagonal line (lower left to upper right) shows the identity, 
+control groups (for the \code{X} and \code{Y} axes) respectively. The sizes of the circles 
+correspond to the relative sizes of the strata. A diagonal line (lower left to upper right) shows the identity, 
 \code{X=Y}, so that circles on, say, the lower side of this line show that the corresponding \code{X} 
 mean is larger than the \code{Y} mean for that stratum, and vice-versa. Parallel projections are 
 made from the centers of the strata-cum-circles to difference scores that are plotted on a line 
 segment on the lower-left corner of the graphic; the average difference, which corresponds to 
-the direct adjustment estimator (DAE) for the overall treatment effect, is plotted as a 
-heavy dashed line parallel to the identity diagonal. Rug plots are shown on the upper and 
+the average treatment effect (ATE) for the overall treatment effect, is plotted as a 
+heavy (dark blue) dashed line parallel to the identity diagonal. Rug plots are shown on the upper and 
 right margins of the graphic, for the \code{X} and \code{Y} marginal distributions. A 95\% 
 confidence interval for the overall effect is plotted to the left of the distribution of the 
-stratum difference scores, centered on the DAE. Trimmed means can replace the conventional 
-mean for both the DAE and the marginal distributions (however, the confidence interval 
+stratum difference scores, centered on the ATE. Trimmed means can replace the conventional 
+mean for both the ATE and the marginal distributions (however, the confidence interval 
 calculations are likely to become less trustworthy as larger values of the trim argument are used).}
 
-\author{James E. Helmreich \email{ James.Helmreich@Marist.edu}
+\author{James E. Helmreich \email{James.Helmreich@Marist.edu}
 
  Robert M. Pruzek \email{RMPruzek@yahoo.com}}
 \seealso{\code{\link{loess.psa}}}
