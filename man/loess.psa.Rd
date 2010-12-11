@@ -10,8 +10,9 @@ provided, for both description and inference.  Graphic motivated by a suggestion
 \usage{
 loess.psa(response, treatment = NULL, propensity = NULL, 
 family = "gaussian", 
-span = 0.7, degree = 1, minsize = 5, xlim = c(0, 1), 
-colors = c('dark blue','dark green','blue','dark green'), 
+span = 0.7, degree = 1, minsize = 5, 
+colors = c('dark blue','dark green','blue','dark green'),
+xlim = NULL, ylim = NULL,  
 legend.xy = "topleft", legend = NULL,
 int = 10, lines = TRUE, strata.lines = TRUE, rg = TRUE, 
 xlab = "Estimated Propensity Scores", 
@@ -28,9 +29,10 @@ ylab = "Response", pch = c(16,1), ...)
   \item{minsize}{Integer.  Determines the minimum number of observations in each stratum treatment group allowed.  
      If one of the treatment groups in a given statum does not meet this minsize, then all observations 
      in this stratum are ignored as far as the effect size calculation is concerned.}
-  \item{xlim}{Binary vector \code{(min, max)} providing the horizontal axis minimum and maximum.  Default is \code{c(0, 1)}.}
-  \item{colors}{List of four colors used for control points, treatment points, control loess line, treatment loess 
+   \item{colors}{List of four colors used for control points, treatment points, control loess line, treatment loess 
      line respectively.  Default = \code{c("seagreen3", "goldenrod1", "seagreen4", "goldenrod3")}.}
+ \item{xlim}{Binary vector \code{(min, max)} providing the horizontal axis minimum and maximum. Internal default is \code{c(0, 1)}.}
+ \item{ylim}{Binary vector \code{(min, max)} providing the vertical axis minimum and maximum.  Internal default is taken from \code{response}.}
   \item{legend.xy}{Coordinates for legend box, see \code{legend}.  Default = \code{"topleft"}.}
   \item{legend}{Binary character vector containing the text of the legend.  Default is taken from \code{treatment}.} 
   \item{int}{Integer or ordered vector.  If an integer is used, it represents the maximum number of equally sized strata.  

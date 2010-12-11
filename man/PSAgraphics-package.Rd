@@ -17,7 +17,7 @@ A collection of functions that primarily produce graphics to aid in a
 \details{
 \tabular{ll}{
 Package: \tab PSAgraphics\cr
-Version: \tab 2.0\cr
+Version: \tab 2.01\cr
 License: \tab GPL (>= 2)\cr
 }
 }
@@ -26,6 +26,8 @@ License: \tab GPL (>= 2)\cr
 James E. Helmreich <James.Helmreich@Marist.edu> and 
 
 Robert M. Pruzek <RMPruzek@yahoo.com> 
+
+KuangNan Xiong <harryxkn@yahoo.com>
 
 Maintainer: James E. Helmreich <James.Helmreich@Marist.edu>
 }
@@ -39,7 +41,6 @@ Maintainer: James E. Helmreich <James.Helmreich@Marist.edu>
 \code{\link{loess.psa}}
 \code{\link{bal.ks.psa}}
 \code{\link{bal.ms.psa}}
-
 \code{\link{bal.fe.psa}}
 \code{\link{cstrata.psa}}
 \code{\link{cv.trans.psa}}

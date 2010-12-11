@@ -15,6 +15,10 @@ citEntry(entry = "Article",
   paste("James E. Helmreich, Robert M. Pruzek (2009).",
         "PSAgraphics: An R Package to Support Propensity Score Analysis.",
         "Journal of Statistical Software 29(6), 1-23.",
-        "URL http://www.jstatsoft.org/v29/i06/.")
+        "URL http://www.jstatsoft.org/v29/i06/.",
+        "We are grateful to KuangNan Xiong for significant 
+        work on the functions new to version 2.0: 
+        cstrata.psa, cv.bal.psa, and cv.trans.psa."
+)
 )
 
