@@ -1,7 +1,7 @@
 loess.psa<-function(response, treatment = NULL, 
     propensity = NULL, family = "gaussian", span = .7, degree=1, minsize=5,
-    colors = c('dark blue','dark green','blue','dark green'), 
-    xlim = NULL, ylim = NULL, legend.xy = "topleft", legend = NULL, int = 10, 
+    xlim=c(0,1),  colors = c('dark blue','dark green','blue','dark green'), 
+    legend.xy = "topleft", legend = NULL, int = 10, 
     lines = TRUE, strata.lines = TRUE, rg = TRUE, 
     xlab="Estimated Propensity Scores", ylab="Response", pch = c(16,1), ...){
 
@@ -19,15 +19,12 @@ response<-rtp[,1]
 treatment<-rtp[,2]
 propensity<-rtp[,3]
 
-if(is.null(xlim)) xlim <- range(rtp$prop)
-if(is.null(ylim)) ylim <- range(rtp$resp)
-
 #Getting the loess estimates of response
 loess.0<-loess(rtp$r~rtp$p, subset = treatment == sut[1], family = family, span = span, degree=degree)
 loess.1<-loess(rtp$r~rtp$p, subset = treatment == sut[2], family = family, span = span, degree=degree)
 
 #Plotting points (propensity,response) by treatment levels 0 and 1
-plot(rtp$p,rtp$r,type="n", xlim = xlim, ylim = ylim, xlab=xlab,ylab=ylab)
+plot(rtp$p,rtp$r,type="n",xlim=range(rtp$p),xlab=xlab,ylab=ylab)
 points(rtp$p[treatment==sut[1]],rtp$r[treatment==sut[1]],col=colors[1],pch = pch[1], ... )
 points(rtp$p[treatment==sut[2]],rtp$r[treatment==sut[2]],col=colors[2],pch = pch[2], ...)
 li<-length(int)
