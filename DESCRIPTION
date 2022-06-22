@@ -1,5 +1,5 @@
 Package: PSAgraphics
-Version: 2.1.1
+Version: 2.1.1.1
 Date: 2012-03-18
 Title: Propensity Score Analysis Graphics
 Author: James E. Helmreich <James.Helmreich@Marist.edu> and Robert M.
@@ -17,6 +17,7 @@ Description: A collection of functions that primarily produce graphics
         estimate, and various balance functions that provide measures
         of the balance achieved via a PSA in a categorical covariate.
 License: GPL (>= 2)
-Packaged: 2012-03-18 18:07:20 UTC; ilfautetre
+Packaged: 2022-06-22 05:38:32 UTC; hornik
 Repository: CRAN
-Date/Publication: 2012-03-18 18:39:58
+Date/Publication: 2022-06-22 05:53:27 UTC
+NeedsCompilation: no

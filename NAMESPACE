@@ -1,1 +1,8 @@
 export(cat.psa, box.psa, loess.psa, circ.psa, bal.ks.psa, bal.cs.psa, bal.fe.psa, bal.ms.psa, cv.bal.psa, cstrata.psa, cv.trans.psa)
+
+importFrom("grDevices", "terrain.colors")
+importFrom("graphics", "abline", "axis", "box", "boxplot", "hist",
+           "legend", "lines", "par", "points", "rect", "rug",
+           "segments", "symbols", "text", "title")
+importFrom("stats", "aggregate", "fisher.test", "ks.test", "loess",
+           "na.omit", "qt", "quantile", "runif", "sd", "var")
