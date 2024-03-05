@@ -1,7 +1,7 @@
 Package: PSAgraphics
 Title: Propensity Score Analysis Graphics
-Version: 2.1.2
-Date: 2023-03-20
+Version: 2.1.3
+Date: 2024-03-05
 Authors@R: c(
     person("James", "Helmreich", , "James.Helmreich@Marist.edu", role = "aut"),
     person("Robert", "Pruzek", role = "aut"),
@@ -22,14 +22,14 @@ License: GPL (>= 2)
 URL: https://jbryer.github.io/PSAgraphics/
 BugReports: https://github.com/jbryer/PSAgraphics/issues
 Depends: R (>= 2.14.0), rpart
+Imports: graphics, grDevices, stats
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Imports: graphics, grDevices, stats
 NeedsCompilation: no
-Packaged: 2023-03-21 00:54:34 UTC; jbryer
+Packaged: 2024-03-05 17:19:23 UTC; jbryer
 Author: James Helmreich [aut],
   Robert Pruzek [aut],
   Jason Bryer [ctb, cre] (<https://orcid.org/0000-0002-2454-0402>),
   KuangNan Xiong [ctb]
 Repository: CRAN
-Date/Publication: 2023-03-21 12:30:02 UTC
+Date/Publication: 2024-03-05 17:50:06 UTC
